@@ -7,7 +7,8 @@ import Maybe
 
 
 {- Creates an infinite generator from a list.
-   It will keep cycling throught the list, repeating form the beginning if it reaches the end
+   It will keep cycling throught the list, repeating form the beginning if it reaches the end.
+   Note the `defVal` is required by the type system but will never be used unless the source is empty.
 -}
 
 
