@@ -1,0 +1,26 @@
+{
+  "name": "aoc2018",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MikeyBurkman/aoc2018.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MikeyBurkman/aoc2018/issues"
+  },
+  "homepage": "https://github.com/MikeyBurkman/aoc2018#readme",
+  "dependencies": {
+    "@types/node": "^10.12.11",
+    "prettier": "^1.15.3",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.2.1",
+    "web-request": "^1.0.7"
+  }
+}
