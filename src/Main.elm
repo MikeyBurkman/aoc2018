@@ -2,7 +2,7 @@ module Main exposing (Msg(..), main, update, view)
 
 import Browser
 import Day1.Puzzle as Day1
-import Html exposing (Html, button, div, li, text, ul)
+import Html exposing (Html, br, button, div, text)
 import Html.Events exposing (onClick)
 import List
 import Maybe
@@ -38,6 +38,7 @@ puzzleBtn puzzle label =
 view model =
     div []
         [ div [] [ text ("Solution: " ++ String.fromInt model) ]
+        , br [] []
         , div
             []
             [ puzzleBtn
