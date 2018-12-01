@@ -1,6 +1,6 @@
 {
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "typescript.referencesCodeLens.enabled": true,
-  "typescript.implementationsCodeLens.enabled": true,
+  "elm.compiler": "./node_modules/.bin/elm",
+  "elm.makeCommand": "./node_modules/.bin/elm make",
+  "elm.formatCommand": "./node_modules/.bin/elm-format",
   "editor.formatOnSave": true
 }

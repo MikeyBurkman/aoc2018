@@ -1,6 +1,7 @@
 # Advent of Code 2018
 
 ### Setup
-1. Get your session cookie from the web inspector
-2. Create a `.session` file at the root and paste the cookie value in there
-3. `yarn start puzzle-12-xx.ts` to run a puzzle
+
+1. Run `yarn install`
+2. Run `yarn start`
+3. Go to `http://localhost:8000/src/Main.elm`
