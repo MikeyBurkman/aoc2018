@@ -6,7 +6,8 @@
   "scripts": {
     "elm": "elm",
     "start": "elm reactor",
-    "format": "elm-format src --yes"
+    "format": "elm-format src --yes",
+    "make": "elm make src/Main.elm"
   },
   "repository": {
     "type": "git",
