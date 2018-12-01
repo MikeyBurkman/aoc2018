@@ -27,8 +27,8 @@ nextVal arr idx =
     Array.get i arr |> Maybe.withDefault 0
 
 
-findDuplicateFreq : Set.Set Int -> Array.Array Int -> Int -> Int -> Int
-findDuplicateFreq seen values curFreq curIdx =
+findDuplicateFreq : Array.Array Int -> Set.Set Int -> Int -> Int -> Int
+findDuplicateFreq values seen curFreq curIdx =
     let
         val =
             nextVal values curIdx
@@ -40,13 +40,13 @@ findDuplicateFreq seen values curFreq curIdx =
         newFreq
 
     else
-        findDuplicateFreq (Set.insert newFreq seen) values newFreq (curIdx + 1)
+        findDuplicateFreq values (Set.insert newFreq seen) newFreq (curIdx + 1)
 
 
 part2 : Int
 part2 =
     let
-        arr =
-            Array.fromList parsedInput
+        findDupes =
+            Array.fromList parsedInput |> findDuplicateFreq
     in
-    findDuplicateFreq Set.empty arr 0 0
+    findDupes Set.empty 0 0
