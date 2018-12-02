@@ -15,18 +15,18 @@ parsedInput =
 -- Part 1 Solution: 510
 
 
-part1 : Int
+part1 : String
 part1 =
-    List.sum parsedInput
+    List.sum parsedInput |> String.fromInt
 
 
 
 -- Part 2 solution: 69074
 
 
-part2 : Int
+part2 : String
 part2 =
-    findDuplicateFreq (Gen.fromList parsedInput 0) Set.empty 0
+    findDuplicateFreq (Gen.fromList parsedInput 0) Set.empty 0 |> String.fromInt
 
 
 findDuplicateFreq : Gen.Generator Int -> Set.Set Int -> Int -> Int
