@@ -17,6 +17,7 @@ type Puzzle
     = Day1_1
     | Day1_2
     | Day2_1
+    | Day2_2
 
 
 type Msg
@@ -33,6 +34,9 @@ update msg model =
 
         Selected Day2_1 ->
             Day2.part1
+
+        Selected Day2_2 ->
+            Day2.part2
 
 
 puzzleBtn : Puzzle -> String -> Html Msg
@@ -55,5 +59,8 @@ view model =
             , puzzleBtn
                 Day2_1
                 "Day 2 Part 1"
+            , puzzleBtn
+                Day2_2
+                "Day 2 Part 2"
             ]
         ]

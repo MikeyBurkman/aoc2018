@@ -2,5 +2,6 @@
   "elm.compiler": "./node_modules/.bin/elm",
   "elm.makeCommand": "./node_modules/.bin/elm make",
   "elm.formatCommand": "./node_modules/.bin/elm-format",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "elm.maxWorkspaceFilesUsedBySymbols": 500
 }

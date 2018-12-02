@@ -1,7 +1,7 @@
-module Day2.Input exposing (input)
+module Day2.Input exposing (input, testInput_1, testInput_2)
 
 
-testInput =
+testInput_1 =
     """abcdef
 bababc
 abbcde
@@ -9,6 +9,16 @@ abcccd
 aabcdd
 abcdee
 ababab"""
+
+
+testInput_2 =
+    """abcde
+fghij
+klmno
+pqrst
+fguij
+axcye
+wvxyz"""
 
 
 input =
