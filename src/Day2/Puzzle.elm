@@ -73,11 +73,7 @@ oneLetterOff s1 s2 =
 
 findCloseMatch : List String -> String -> Maybe ( String, String )
 findCloseMatch list str =
-    let
-        found =
-            find (oneLetterOff str) list
-    in
-    case found of
+    case find (oneLetterOff str) list of
         Just s ->
             Just ( s, str )
 
@@ -87,11 +83,7 @@ findCloseMatch list str =
 
 findCloseMatchInList : List String -> Maybe ( String, String )
 findCloseMatchInList list =
-    let
-        search =
-            findCloseMatch list
-    in
-    List.filterMap search list |> List.head
+    list |> List.filterMap (findCloseMatch list) |> List.head
 
 
 removeDifferingChars : String -> String -> String
@@ -104,11 +96,7 @@ removeDifferingChars s1 s2 =
 
 part2 : String
 part2 =
-    let
-        found =
-            findCloseMatchInList parsedInput
-    in
-    case found of
+    case findCloseMatchInList parsedInput of
         Just ( s1, s2 ) ->
             removeDifferingChars s1 s2
 
