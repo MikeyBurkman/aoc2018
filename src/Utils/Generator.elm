@@ -21,16 +21,16 @@ type alias Generator n =
 
 next : Generator n -> Generator n
 next generator =
-    { generator | idx = generator.idx + 1 }
+    let
+        idx =
+            remainderBy (Array.length generator.arr) (generator.idx + 1)
+    in
+    { generator | idx = idx }
 
 
 current : Generator n -> n
 current generator =
-    let
-        i =
-            remainderBy (Array.length generator.arr) generator.idx
-    in
-    Array.get i generator.arr |> Maybe.withDefault generator.defVal
+    Array.get generator.idx generator.arr |> Maybe.withDefault generator.defVal
 
 
 fromList : List n -> n -> Generator n
