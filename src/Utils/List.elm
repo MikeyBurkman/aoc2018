@@ -10,4 +10,13 @@ zip l1 l2 =
 
 find : (m -> Bool) -> List m -> Maybe m
 find test list =
-    list |> List.filter test |> List.head
+    case list of
+        [] ->
+            Nothing
+
+        head :: tail ->
+            if test head then
+                Just head
+
+            else
+                find test tail
