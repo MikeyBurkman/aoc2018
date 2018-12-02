@@ -61,7 +61,7 @@ pairEqual tuple =
 countCharDiffs : String -> String -> Int
 countCharDiffs s1 s2 =
     zipStrings s1 s2
-        |> List.filter (pairEqual >> not)
+        |> List.filter (not << pairEqual)
         |> List.length
 
 
@@ -83,7 +83,9 @@ findCloseMatch list str =
 
 findCloseMatchInList : List String -> Maybe ( String, String )
 findCloseMatchInList list =
-    list |> List.filterMap (findCloseMatch list) |> List.head
+    list
+        |> List.filterMap (findCloseMatch list)
+        |> List.head
 
 
 removeDifferingChars : String -> String -> String
