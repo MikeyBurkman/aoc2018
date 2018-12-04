@@ -1,4 +1,4 @@
-module Day3.Puzzle exposing (part1)
+module Day3.Part1 exposing (solution)
 
 import Day3.Parser exposing (ParsedSquare, parsedInput)
 import Dict
@@ -16,8 +16,8 @@ type alias Int2dTable =
     Dict.Dict Int (Dict.Dict Int Int)
 
 
-addCoord : Int2dTable -> Coord -> Int2dTable
-addCoord table ( x, y ) =
+addCoord : Coord -> Int2dTable -> Int2dTable
+addCoord ( x, y ) table =
     let
         col =
             Dict.get x table |> Maybe.withDefault Dict.empty
@@ -33,16 +33,7 @@ addCoord table ( x, y ) =
 
 addCoords : Int2dTable -> List Coord -> Int2dTable
 addCoords table list =
-    case list of
-        [] ->
-            table
-
-        coord :: rest ->
-            let
-                newTable =
-                    addCoord table coord
-            in
-            addCoords newTable rest
+    List.foldl addCoord table list
 
 
 toCoords : ParsedSquare -> List Coord
@@ -79,8 +70,8 @@ countMarked table =
 -- Part 1 solution: 112418
 
 
-part1 : String
-part1 =
+solution : String
+solution =
     let
         coords =
             parsedInput |> List.concatMap toCoords
