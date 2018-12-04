@@ -1,11 +1,11 @@
-module Day3.Part1 exposing (solution)
+module Day3.Puzzle exposing (part1, part2)
 
 import Day3.Parser exposing (ParsedSquare, parsedInput)
 import Dict
 import Maybe
 import Utils.Dict as DictUtils
-import Utils.List exposing (cartesian)
-import Utils.Maybe exposing (exists)
+import Utils.List exposing (cartesian, find)
+import Utils.Maybe exposing (maybeIs)
 
 
 type alias Coord =
@@ -66,17 +66,66 @@ countMarked table =
     List.filter (\n -> n > 1) allValues |> List.length
 
 
+buildTableFromInput : Int2dTable
+buildTableFromInput =
+    parsedInput
+        |> List.concatMap toCoords
+        |> addCoords Dict.empty
+
+
 
 -- Part 1 solution: 112418
 
 
-solution : String
-solution =
+part1 : String
+part1 =
     let
-        coords =
-            parsedInput |> List.concatMap toCoords
-
         table =
-            addCoords Dict.empty coords
+            buildTableFromInput
     in
     countMarked table |> String.fromInt
+
+
+
+-- Part 2 solution: 560
+
+
+coordIs : Int2dTable -> Int -> Coord -> Bool
+coordIs table match ( x, y ) =
+    let
+        col =
+            Dict.get x table
+    in
+    case col of
+        Nothing ->
+            False
+
+        Just row ->
+            Dict.get y row |> maybeIs match
+
+
+allCoordsSetTo : Int2dTable -> Int -> List Coord -> Bool
+allCoordsSetTo table match coords =
+    List.all (coordIs table match) coords
+
+
+parsedSquareNoOverlap : Int2dTable -> ParsedSquare -> Bool
+parsedSquareNoOverlap table square =
+    toCoords square |> allCoordsSetTo table 1
+
+
+part2 : String
+part2 =
+    let
+        table =
+            buildTableFromInput
+
+        match =
+            find (parsedSquareNoOverlap table) parsedInput
+    in
+    case match of
+        Nothing ->
+            "Uhoh..."
+
+        Just square ->
+            square.id |> String.fromInt
