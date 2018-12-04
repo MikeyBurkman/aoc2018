@@ -1,4 +1,4 @@
-module Utils.Dict exposing (addToDict)
+module Utils.Dict exposing (addToDict, toString)
 
 import Dict
 
@@ -14,3 +14,11 @@ addToDict n dict =
             Dict.get n dict |> Maybe.withDefault 0
     in
     Dict.insert n (count + 1) dict
+
+
+toString : (k -> String) -> (v -> String) -> Dict.Dict k v -> String
+toString keyToString valueToString table =
+    Dict.toList table
+        |> List.map (\( k, v ) -> "(" ++ keyToString k ++ ", " ++ valueToString v ++ ")")
+        |> String.join ", "
+        |> (\s -> "[" ++ s ++ "]")

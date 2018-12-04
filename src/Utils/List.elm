@@ -1,6 +1,11 @@
-module Utils.List exposing (find, zip)
+module Utils.List exposing (cartesian, find, zip)
 
 import List
+
+
+cartesian : List m -> List n -> List ( m, n )
+cartesian l1 l2 =
+    List.concatMap (\m -> List.map (\n -> ( m, n )) l2) l1
 
 
 zip : List m -> List n -> List ( m, n )
