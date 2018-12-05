@@ -13,8 +13,8 @@ main =
 
 
 type Puzzle
-    = Day3_1
-    | Day3_2
+    = Part1
+    | Part2
 
 
 type Msg
@@ -23,10 +23,10 @@ type Msg
 
 update msg model =
     case msg of
-        Selected Day3_1 ->
+        Selected Part1 ->
             Day3Part1.part1
 
-        Selected Day3_2 ->
+        Selected Part2 ->
             Day3Part1.part2
 
 
@@ -42,10 +42,10 @@ view model =
         , div
             []
             [ puzzleBtn
-                Day3_1
-                "Day 3 Part 1"
+                Part1
+                "Part 1"
             , puzzleBtn
-                Day3_2
-                "Day 3 Part 2"
+                Part2
+                "Part 2"
             ]
         ]
