@@ -114,26 +114,24 @@ react idx polymer =
     let
         pair =
             getElementPair idx polymer
-
-        maybeReactive =
-            Maybe.map (\( ( _, c1 ), ( _, c2 ) ) -> isReactive c1 c2) pair
     in
-    case ( maybeReactive, pair ) of
-        ( Just True, Just ( ( i1, _ ), ( i2, _ ) ) ) ->
-            let
-                reduced =
-                    reducePolymer i1 i2 polymer
-
-                newIdx =
-                    prevIdx i1 reduced
-            in
-            react newIdx reduced
-
-        ( Just False, _ ) ->
-            react (nextIdx (idx + 1) polymer) polymer
-
-        _ ->
+    case pair of
+        Nothing ->
             polymer
+
+        Just ( ( i1, c1 ), ( i2, c2 ) ) ->
+            if isReactive c1 c2 then
+                let
+                    reduced =
+                        reducePolymer i1 i2 polymer
+
+                    newIdx =
+                        prevIdx i1 reduced
+                in
+                react newIdx reduced
+
+            else
+                react (nextIdx (idx + 1) polymer) polymer
 
 
 polymerToString : Polymer -> String
@@ -187,6 +185,10 @@ calcPolymerLengths origInput charList results =
 part1 : String
 part1 =
     polymerLength input |> String.fromInt
+
+
+
+-- Part 2 solution : 4684 (char = v)
 
 
 part2 : String
