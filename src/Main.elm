@@ -1,7 +1,7 @@
 module Main exposing (Msg(..), main, update, view)
 
 import Browser
-import Day3.Puzzle as Day3Part1
+import Day5.Puzzle as Solution
 import Html exposing (Html, br, button, div, text)
 import Html.Events exposing (onClick)
 import List
@@ -24,10 +24,10 @@ type Msg
 update msg model =
     case msg of
         Selected Part1 ->
-            Day3Part1.part1
+            Solution.part1
 
         Selected Part2 ->
-            Day3Part1.part2
+            Solution.part2
 
 
 puzzleBtn : Puzzle -> String -> Html Msg
