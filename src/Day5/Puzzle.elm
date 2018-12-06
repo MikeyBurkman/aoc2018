@@ -9,13 +9,17 @@ import Utils.Array as UtilsArray
 
 
 input =
-    Input.testInput
+    Input.input
 
 
 type alias Polymer =
     { chars : Array.Array Char
     , reacted : Set.Set Int
     }
+
+
+type alias CharPos =
+    ( Int, Char )
 
 
 toPolymer : List Char -> Polymer
@@ -30,7 +34,8 @@ parsedInput =
 
 isReactive : Char -> Char -> Bool
 isReactive c1 c2 =
-    Char.toUpper c1 == Char.toUpper c2
+    (Char.isUpper c1 && Char.isLower c2 && c1 == Char.toUpper c2)
+        || (Char.isUpper c2 && Char.isLower c1 && c2 == Char.toUpper c1)
 
 
 reducePolymer : Int -> Int -> Polymer -> Polymer
@@ -45,7 +50,7 @@ reducePolymer idx1 idx2 polymer =
     { polymer | reacted = after2 }
 
 
-nextAvailable : Polymer -> Int -> Maybe ( Int, Char )
+nextAvailable : Polymer -> Int -> Maybe CharPos
 nextAvailable polymer idx =
     if idx >= Array.length polymer.chars then
         Nothing
@@ -62,7 +67,7 @@ nextAvailable polymer idx =
                 Nothing
 
 
-getElementPair : Int -> Polymer -> Maybe ( ( Int, Char ), ( Int, Char ) )
+getElementPair : Int -> Polymer -> Maybe ( CharPos, CharPos )
 getElementPair idx polymer =
     let
         size =
@@ -82,6 +87,27 @@ getElementPair idx polymer =
             Nothing
 
 
+nextIdx : Int -> Polymer -> Int
+nextIdx idx polymer =
+    if Set.member idx polymer.reacted then
+        nextIdx (idx + 1) polymer
+
+    else
+        idx
+
+
+prevIdx : Int -> Polymer -> Int
+prevIdx idx polymer =
+    if idx <= 0 then
+        0
+
+    else if Set.member idx polymer.reacted then
+        prevIdx (idx - 1) polymer
+
+    else
+        idx
+
+
 react : Int -> Polymer -> Polymer
 react idx polymer =
     let
@@ -91,12 +117,19 @@ react idx polymer =
         maybeReactive =
             Maybe.map (\( ( _, c1 ), ( _, c2 ) ) -> isReactive c1 c2) pair
     in
-    case ( pair, maybeReactive ) of
-        ( Just ( ( i1, _ ), ( i2, _ ) ), Just True ) ->
-            reducePolymer i1 i2 polymer |> react 0
+    case ( maybeReactive, pair ) of
+        ( Just True, Just ( ( i1, _ ), ( i2, _ ) ) ) ->
+            let
+                reduced =
+                    reducePolymer i1 i2 polymer
 
-        ( _, Just False ) ->
-            react (idx + 1) polymer
+                newIdx =
+                    prevIdx i1 reduced
+            in
+            react newIdx reduced
+
+        ( Just False, _ ) ->
+            react (nextIdx (idx + 1) polymer) polymer
 
         _ ->
             polymer
@@ -112,7 +145,11 @@ polymerToString polymer =
 
 part1 : String
 part1 =
-    parsedInput |> react 0 |> Debug.log "Solution" |> polymerToString
+    parsedInput
+        |> react 0
+        |> polymerToString
+        |> String.length
+        |> String.fromInt
 
 
 part2 : String
