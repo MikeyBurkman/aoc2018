@@ -3,9 +3,10 @@ module Day5.Puzzle exposing (part1, part2)
 import Array
 import Day5.Input as Input
 import Debug
+import Dict
 import Maybe
 import Set
-import Utils.Array as UtilsArray
+import Utils.List exposing (maxBy)
 
 
 input =
@@ -27,9 +28,9 @@ toPolymer charList =
     { chars = Array.fromList charList, reacted = Set.empty }
 
 
-parsedInput : Polymer
-parsedInput =
-    String.toList input |> toPolymer
+parseInput : String -> Polymer
+parseInput str =
+    String.toList str |> toPolymer
 
 
 isReactive : Char -> Char -> Bool
@@ -143,19 +144,70 @@ polymerToString polymer =
         |> String.fromList
 
 
+withCharRemoved : Char -> String -> String
+withCharRemoved char str =
+    String.filter (\c -> c /= char && c /= Char.toUpper char) str
+
+
+charsToRemove : List Char
+charsToRemove =
+    String.toList "abcdefghijklmnopqrstuvwxyz"
+
+
+polymerLength : String -> Int
+polymerLength str =
+    str
+        |> parseInput
+        |> react 0
+        |> polymerToString
+        |> String.length
+
+
+calcPolymerLengths : String -> List Char -> Dict.Dict Char Int -> Dict.Dict Char Int
+calcPolymerLengths origInput charList results =
+    case charList of
+        [] ->
+            results
+
+        head :: tail ->
+            let
+                count =
+                    origInput |> withCharRemoved head |> polymerLength
+
+                newResults =
+                    Dict.insert head count results
+            in
+            calcPolymerLengths origInput tail newResults
+
+
 
 -- Part 1 solution: 10886
 
 
 part1 : String
 part1 =
-    parsedInput
-        |> react 0
-        |> polymerToString
-        |> String.length
-        |> String.fromInt
+    polymerLength input |> String.fromInt
 
 
 part2 : String
 part2 =
-    "abc"
+    let
+        results =
+            calcPolymerLengths input charsToRemove Dict.empty
+
+        tuples =
+            Dict.toList results
+
+        max =
+            maxBy (\( char, count ) -> -count) tuples
+    in
+    case max of
+        Nothing ->
+            "oop..."
+
+        Just ( char, count ) ->
+            let
+                x =
+                    Debug.log "Char + Count" ( char, count )
+            in
+            String.fromInt count

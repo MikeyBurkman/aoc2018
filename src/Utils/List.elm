@@ -1,4 +1,4 @@
-module Utils.List exposing (cartesian, find, zip)
+module Utils.List exposing (cartesian, find, maxBy, zip)
 
 import List
 
@@ -25,3 +25,27 @@ find test list =
 
             else
                 find test tail
+
+
+maxBy : (m -> Int) -> List m -> Maybe m
+maxBy fn list =
+    maxByHelper fn list Nothing
+
+
+maxByHelper : (m -> Int) -> List m -> Maybe m -> Maybe m
+maxByHelper fn list soFar =
+    case list of
+        [] ->
+            soFar
+
+        head :: tail ->
+            case soFar of
+                Nothing ->
+                    maxByHelper fn tail (Just head)
+
+                Just prevValue ->
+                    if fn head > fn prevValue then
+                        maxByHelper fn tail (Just head)
+
+                    else
+                        maxByHelper fn tail (Just prevValue)
