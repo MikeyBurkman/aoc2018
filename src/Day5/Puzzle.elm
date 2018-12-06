@@ -143,6 +143,10 @@ polymerToString polymer =
         |> String.fromList
 
 
+
+-- Part 1 solution: 10886
+
+
 part1 : String
 part1 =
     parsedInput
