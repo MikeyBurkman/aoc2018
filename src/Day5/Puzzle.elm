@@ -1,49 +1,82 @@
 module Day5.Puzzle exposing (part1, part2)
 
 import Array
-import Day5.Input exposing (input)
+import Day5.Input as Input
 import Debug
 import Maybe
+import Set
 import Utils.Array as UtilsArray
 
 
+input =
+    Input.testInput
+
+
 type alias Polymer =
-    Array.Array Char
+    { chars : Array.Array Char
+    , reacted : Set.Set Int
+    }
 
 
+toPolymer : List Char -> Polymer
+toPolymer charList =
+    { chars = Array.fromList charList, reacted = Set.empty }
+
+
+parsedInput : Polymer
 parsedInput =
-    String.toList input |> Array.fromList
+    String.toList input |> toPolymer
 
 
-isReactive : ( Char, Char ) -> Bool
-isReactive ( c1, c2 ) =
+isReactive : Char -> Char -> Bool
+isReactive c1 c2 =
     Char.toUpper c1 == Char.toUpper c2
 
 
-reducePolymer : Int -> Polymer -> Polymer
-reducePolymer idx polymer =
+reducePolymer : Int -> Int -> Polymer -> Polymer
+reducePolymer idx1 idx2 polymer =
     let
-        head =
-            Array.slice 0 idx polymer
+        after1 =
+            Set.insert idx1 polymer.reacted
 
-        tail =
-            Array.slice (idx + 2) (Array.length polymer) polymer
+        after2 =
+            Set.insert idx2 after1
     in
-    Array.append head tail
+    { polymer | reacted = after2 }
 
 
-getElementPair : Int -> Polymer -> Maybe ( Char, Char )
+nextAvailable : Polymer -> Int -> Maybe ( Int, Char )
+nextAvailable polymer idx =
+    if idx >= Array.length polymer.chars then
+        Nothing
+
+    else if Set.member idx polymer.reacted then
+        nextAvailable polymer (idx + 1)
+
+    else
+        case Array.get idx polymer.chars of
+            Just c ->
+                Just ( idx, c )
+
+            Nothing ->
+                Nothing
+
+
+getElementPair : Int -> Polymer -> Maybe ( ( Int, Char ), ( Int, Char ) )
 getElementPair idx polymer =
     let
+        size =
+            Array.length polymer.chars
+
         first =
-            Array.get idx polymer
+            nextAvailable polymer idx
 
         second =
-            Array.get (idx + 1) polymer
+            Maybe.andThen (\( i, _ ) -> nextAvailable polymer (i + 1)) first
     in
     case ( first, second ) of
-        ( Just f, Just s ) ->
-            Just ( f, s )
+        ( Just x, Just y ) ->
+            Just ( x, y )
 
         _ ->
             Nothing
@@ -52,23 +85,34 @@ getElementPair idx polymer =
 react : Int -> Polymer -> Polymer
 react idx polymer =
     let
+        pair =
+            getElementPair idx polymer
+
         maybeReactive =
-            getElementPair idx polymer |> Maybe.map isReactive
+            Maybe.map (\( ( _, c1 ), ( _, c2 ) ) -> isReactive c1 c2) pair
     in
-    case maybeReactive of
-        Nothing ->
+    case ( pair, maybeReactive ) of
+        ( Just ( ( i1, _ ), ( i2, _ ) ), Just True ) ->
+            reducePolymer i1 i2 polymer |> react 0
+
+        ( _, Just False ) ->
+            react (idx + 1) polymer
+
+        _ ->
             polymer
 
-        Just True ->
-            reducePolymer idx polymer |> react 0
 
-        Just False ->
-            react (idx + 1) polymer
+polymerToString : Polymer -> String
+polymerToString polymer =
+    Array.toIndexedList polymer.chars
+        |> List.filter (\( i, _ ) -> (not << Set.member i) polymer.reacted)
+        |> List.map Tuple.second
+        |> String.fromList
 
 
 part1 : String
 part1 =
-    react 0 parsedInput |> UtilsArray.toString
+    parsedInput |> react 0 |> Debug.log "Solution" |> polymerToString
 
 
 part2 : String
