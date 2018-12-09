@@ -1,7 +1,7 @@
 module Main exposing (Msg(..), main, update, view)
 
 import Browser
-import Day5.Puzzle as Solution
+import Day7.Puzzle as Solution
 import Html exposing (Html, br, button, div, text)
 import Html.Events exposing (onClick)
 import List
