@@ -3,6 +3,7 @@ module AoC2019.Day2.Puzzle exposing (part1, part2)
 import AoC2019.Day2.Input exposing (input)
 import Array
 import Maybe
+import Utils.List exposing (cartesian, find)
 
 
 parsedInput =
@@ -60,6 +61,33 @@ runOp pos program =
                 |> runOp (pos + 4)
 
 
+getOutput : Int -> Int -> Array.Array Int -> Int
+getOutput noun verb program =
+    program
+        |> Array.set 1 noun
+        |> Array.set 2 verb
+        |> runOp 0
+        |> Array.get 0
+        |> Maybe.withDefault 0
+
+
+findMatching : Int -> Array.Array Int -> ( Int, Int )
+findMatching goal program =
+    let
+        possible =
+            cartesian (List.range 0 99) (List.range 0 99)
+
+        match =
+            possible |> find (\( noun, verb ) -> getOutput noun verb program == goal)
+    in
+    case match of
+        Just result ->
+            result
+
+        Nothing ->
+            ( -1, -1 )
+
+
 
 -- Part 1 answer: 4484226
 
@@ -67,14 +95,18 @@ runOp pos program =
 part1 : String
 part1 =
     parsedInput
-        |> Array.set 1 12
-        |> Array.set 2 2
-        |> runOp 0
-        |> Array.get 0
-        |> Maybe.withDefault 0
+        |> getOutput 12 2
         |> String.fromInt
+
+
+
+-- Part 2 answer: 5696
 
 
 part2 : String
 part2 =
-    "abc"
+    let
+        ( noun, verb ) =
+            findMatching 19690720 parsedInput
+    in
+    (noun * 100) + verb |> String.fromInt
