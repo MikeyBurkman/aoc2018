@@ -1,6 +1,6 @@
-module Day2.Puzzle exposing (part1, part2)
+module AoC2018.Day2.Puzzle exposing (part1, part2)
 
-import Day2.Input exposing (input)
+import AoC2018.Day2.Input exposing (input)
 import Dict
 import List
 import Maybe

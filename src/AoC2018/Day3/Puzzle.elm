@@ -1,6 +1,6 @@
-module Day3.Puzzle exposing (part1, part2)
+module AoC2018.Day3.Puzzle exposing (part1, part2)
 
-import Day3.Parser exposing (ParsedSquare, parsedInput)
+import AoC2018.Day3.Parser exposing (ParsedSquare, parsedInput)
 import Dict
 import Maybe
 import Utils.Dict as DictUtils

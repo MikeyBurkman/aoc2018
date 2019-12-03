@@ -1,4 +1,4 @@
-module Day3.Input exposing (input, testInput)
+module AoC2018.Day3.Input exposing (input, testInput)
 
 
 testInput =

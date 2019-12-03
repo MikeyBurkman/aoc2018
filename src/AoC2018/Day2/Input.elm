@@ -1,4 +1,4 @@
-module Day2.Input exposing (input, testInput_1, testInput_2)
+module AoC2018.Day2.Input exposing (input, testInput_1, testInput_2)
 
 
 testInput_1 =
