@@ -13,36 +13,45 @@ parsedInput =
         |> Array.fromList
 
 
+type alias Program =
+    Array.Array Int
+
+
+getAt : Int -> Program -> Int
+getAt position program =
+    Array.get position program |> Maybe.withDefault 0
+
+
 type alias ParsedOps =
     { input1 : Int, input2 : Int, resultPos : Int }
 
 
-getParsedOps : Int -> Array.Array Int -> ParsedOps
+getParsedOps : Int -> Program -> ParsedOps
 getParsedOps pos program =
     let
         input1Pos =
-            Array.get (pos + 1) program |> Maybe.withDefault 0
+            getAt (pos + 1) program
 
         input1 =
-            Array.get input1Pos program |> Maybe.withDefault 0
+            getAt input1Pos program
 
         input2Pos =
-            Array.get (pos + 2) program |> Maybe.withDefault 0
+            getAt (pos + 2) program
 
         input2 =
-            Array.get input2Pos program |> Maybe.withDefault 0
+            getAt input2Pos program
 
         resultPos =
-            Array.get (pos + 3) program |> Maybe.withDefault 0
+            getAt (pos + 3) program
     in
     { input1 = input1, input2 = input2, resultPos = resultPos }
 
 
-runOp : Int -> Array.Array Int -> Array.Array Int
+runOp : Int -> Program -> Program
 runOp pos program =
     let
         opcode =
-            Array.get pos program |> Maybe.withDefault 0
+            getAt pos program
     in
     if opcode == 99 then
         program
@@ -61,7 +70,7 @@ runOp pos program =
                 |> runOp (pos + 4)
 
 
-getOutput : Int -> Int -> Array.Array Int -> Int
+getOutput : Int -> Int -> Program -> Int
 getOutput noun verb program =
     program
         |> Array.set 1 noun
@@ -71,7 +80,7 @@ getOutput noun verb program =
         |> Maybe.withDefault 0
 
 
-findMatching : Int -> Array.Array Int -> ( Int, Int )
+findMatching : Int -> Program -> ( Int, Int )
 findMatching goal program =
     let
         possible =
