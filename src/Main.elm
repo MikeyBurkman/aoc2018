@@ -1,6 +1,6 @@
 module Main exposing (Msg(..), main, update, view)
 
-import AoC2019.Day1.Puzzle as Solution
+import AoC2019.Day2.Puzzle as Solution
 import Browser
 import Html exposing (Html, br, button, div, text)
 import Html.Events exposing (onClick)
