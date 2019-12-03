@@ -60,14 +60,19 @@ runOp pos program =
         let
             parsedOps =
                 getParsedOps pos program
-        in
-        if opcode == 1 then
-            Array.set parsedOps.resultPos (parsedOps.input1 + parsedOps.input2) program
-                |> runOp (pos + 4)
 
-        else
-            Array.set parsedOps.resultPos (parsedOps.input1 * parsedOps.input2) program
-                |> runOp (pos + 4)
+            operand =
+                if opcode == 1 then
+                    (+)
+
+                else
+                    (*)
+
+            result =
+                operand parsedOps.input1 parsedOps.input2
+        in
+        Array.set parsedOps.resultPos result program
+            |> runOp (pos + 4)
 
 
 getOutput : Int -> Int -> Program -> Int
