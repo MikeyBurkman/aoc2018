@@ -32,7 +32,7 @@ parseWire wire =
             String.split "," wire
 
         parsed =
-            pieces |> List.map parseWirePiece
+            pieces |> List.map parseWirePiece |> Debug.log "Parsed pieces"
 
         firstPiece =
             List.head parsed |> Maybe.withDefault ( "", 0 )
@@ -157,6 +157,10 @@ getLines x =
             ( [], [] ) |> Debug.log "Parsed input did not have 2 elements"
 
 
+
+-- Part 1 answer: 399
+
+
 part1 : String
 part1 =
     let
@@ -166,7 +170,6 @@ part1 =
         allIntersections =
             lineList1
                 |> List.concatMap (findCrossings lineList2)
-                |> List.filter (\( x, y ) -> not (x == 0) && not (y == 0))
                 |> Debug.log "All intersections"
 
         distances =
