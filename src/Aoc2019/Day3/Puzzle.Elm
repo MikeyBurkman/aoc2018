@@ -21,7 +21,7 @@ type alias WirePiece =
 
 
 parsedInput =
-    String.lines input |> List.map parseWire |> Debug.log "ParsedInput"
+    String.lines input |> List.map parseWire
 
 
 parseWire : String -> List Line
@@ -32,7 +32,7 @@ parseWire wire =
             String.split "," wire
 
         parsed =
-            pieces |> List.map parseWirePiece |> Debug.log "Parsed pieces"
+            pieces |> List.map parseWirePiece
 
         firstPiece =
             List.head parsed |> Maybe.withDefault ( "", 0 )
@@ -170,7 +170,6 @@ part1 =
         allIntersections =
             lineList1
                 |> List.concatMap (findCrossings lineList2)
-                |> Debug.log "All intersections"
 
         distances =
             allIntersections |> List.map (\( x, y ) -> abs x + abs y)
