@@ -173,7 +173,7 @@ distanceToIntersection : Point -> List Line -> Int -> Int
 distanceToIntersection point lineList totalSoFar =
     case lineList of
         [] ->
-            10000 |> Debug.log "Did not find intersection!"
+            10000
 
         head :: rest ->
             if lineIntersectsPoint point head then
