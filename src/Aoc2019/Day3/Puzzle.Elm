@@ -147,6 +147,18 @@ findCrossings lineList line1 =
     lineList |> List.filterMap (lineIntersection line1)
 
 
+pointDistance : Point -> Point -> Int
+pointDistance p1 p2 =
+    let
+        ( x1, y1 ) =
+            p1
+
+        ( x2, y2 ) =
+            p2
+    in
+    abs (x1 - x2) + abs (y1 - y2)
+
+
 getLines : List (List Line) -> ( List Line, List Line )
 getLines x =
     case x of
@@ -155,6 +167,58 @@ getLines x =
 
         _ ->
             ( [], [] ) |> Debug.log "Parsed input did not have 2 elements"
+
+
+distanceToIntersection : Point -> List Line -> Int -> Int
+distanceToIntersection point lineList totalSoFar =
+    case lineList of
+        [] ->
+            10000 |> Debug.log "Did not find intersection!"
+
+        head :: rest ->
+            if lineIntersectsPoint point head then
+                totalSoFar + pointDistance point (Tuple.first head)
+
+            else
+                distanceToIntersection point rest (totalSoFar + pointDistance (Tuple.first head) (Tuple.second head))
+
+
+lineIntersectsPoint : Point -> Line -> Bool
+lineIntersectsPoint point line =
+    let
+        ( x, y ) =
+            point
+
+        ( ( px1, py1 ), ( px2, py2 ) ) =
+            line
+    in
+    if py1 == py2 then
+        if px1 > px2 then
+            lineIntersectsPoint point ( ( px2, py2 ), ( px1, py1 ) )
+
+        else
+            y == py1 && x >= px1 && x <= px2
+
+    else if py1 > py2 then
+        lineIntersectsPoint point ( ( px2, py2 ), ( px1, py1 ) )
+
+    else
+        x == px1 && y >= py1 && y <= py2
+
+
+totalDistanceToPoint : List Line -> List Line -> Point -> Int
+totalDistanceToPoint lineList1 lineList2 point =
+    let
+        p =
+            Debug.log "Point" point
+
+        dist1 =
+            distanceToIntersection point (List.reverse lineList1) 0
+
+        dist2 =
+            distanceToIntersection point (List.reverse lineList2) 0
+    in
+    dist1 + dist2
 
 
 
@@ -170,9 +234,10 @@ part1 =
         allIntersections =
             lineList1
                 |> List.concatMap (findCrossings lineList2)
+                |> List.filter (\point -> point /= ( 0, 0 ))
 
         distances =
-            allIntersections |> List.map (\( x, y ) -> abs x + abs y)
+            allIntersections |> List.map (pointDistance ( 0, 0 ))
     in
     distances
         |> List.minimum
@@ -180,6 +245,25 @@ part1 =
         |> String.fromInt
 
 
+
+-- Part 2 answer: 15678
+
+
 part2 : String
 part2 =
-    "abc"
+    let
+        ( lineList1, lineList2 ) =
+            getLines parsedInput
+
+        allIntersections =
+            lineList1
+                |> List.concatMap (findCrossings lineList2)
+                |> List.filter (\point -> point /= ( 0, 0 ))
+
+        distances =
+            allIntersections |> List.map (totalDistanceToPoint lineList1 lineList2)
+    in
+    distances
+        |> List.minimum
+        |> Maybe.withDefault -1
+        |> String.fromInt
