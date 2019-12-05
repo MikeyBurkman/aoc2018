@@ -209,9 +209,7 @@ lineIntersectsPoint point line =
 totalDistanceToPoint : List Line -> List Line -> Point -> Int
 totalDistanceToPoint lineList1 lineList2 point =
     let
-        p =
-            Debug.log "Point" point
-
+        -- Line lists are in reverse order due to appending new items to the beginning, so reverse them
         dist1 =
             distanceToIntersection point (List.reverse lineList1) 0
 
