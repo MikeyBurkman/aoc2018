@@ -1,6 +1,8 @@
-module Utils.List exposing (cartesian, find, maxBy, zip)
+module Utils.List exposing (cartesian, counts, find, maxBy, zip)
 
+import Dict
 import List
+import Utils.Dict exposing (addToDict)
 
 
 cartesian : List m -> List n -> List ( m, n )
@@ -49,3 +51,22 @@ maxByHelper fn list soFar =
 
                     else
                         maxByHelper fn tail (Just prevValue)
+
+
+
+-- ["a", "b", "a"] -> {"a": 2, "b": 1}
+
+
+counts : List comparable -> Dict.Dict comparable Int
+counts list =
+    getDigitCounts Dict.empty list
+
+
+getDigitCounts : Dict.Dict comparable Int -> List comparable -> Dict.Dict comparable Int
+getDigitCounts countSoFar list =
+    case list of
+        [] ->
+            countSoFar
+
+        head :: rest ->
+            getDigitCounts (addToDict head countSoFar) rest

@@ -4,7 +4,7 @@ import AoC2019.Day4.Input exposing (input)
 import Debug
 import Dict
 import Set
-import Utils.Dict exposing (addToDict)
+import Utils.List exposing (counts)
 
 
 parsedInput =
@@ -22,20 +22,10 @@ parsedInput =
             [ "" ] |> Debug.log "Parsed input did not have 2 elements"
 
 
-getDigitCounts : Dict.Dict Char Int -> List Char -> Dict.Dict Char Int
-getDigitCounts counts str =
-    case str of
-        [] ->
-            counts
-
-        head :: rest ->
-            getDigitCounts (addToDict head counts) rest
-
-
 hasAdjacentDigits : List Char -> Bool
 hasAdjacentDigits str =
     -- Assumes digits are always increasing
-    getDigitCounts Dict.empty str
+    counts str
         |> Dict.values
         |> List.any (\x -> x >= 2)
 
@@ -56,7 +46,7 @@ digitsIncrease previous str =
 
 hasOneTwiceMatchingNumber : List Char -> Bool
 hasOneTwiceMatchingNumber str =
-    getDigitCounts Dict.empty str
+    counts str
         |> Dict.values
         |> List.any (\x -> x == 2)
 
