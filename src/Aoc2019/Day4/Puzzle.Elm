@@ -22,18 +22,24 @@ parsedInput =
             [ "" ] |> Debug.log "Parsed input did not have 2 elements"
 
 
-hasAdjacentDigits : Set.Set Char -> List Char -> Bool
-hasAdjacentDigits seen str =
+getDigitCounts : Dict.Dict Char Int -> List Char -> Dict.Dict Char Int
+getDigitCounts counts str =
     case str of
         [] ->
-            False
+            counts
 
         head :: rest ->
-            if Set.member head seen then
-                True
+            getDigitCounts (addToDict head counts) rest
 
-            else
-                hasAdjacentDigits (Set.insert head seen) rest
+
+hasAdjacentDigits : List Char -> Bool
+hasAdjacentDigits str =
+    -- Assumes digits are always increasing
+    let
+        counts =
+            getDigitCounts Dict.empty str
+    in
+    Dict.values counts |> List.any (\x -> x >= 2)
 
 
 digitsIncrease : Int -> List Int -> Bool
@@ -50,14 +56,13 @@ digitsIncrease previous str =
                 digitsIncrease head rest
 
 
-hasOneTwiceMatchingNumber : Dict.Dict Char Int -> List Char -> Bool
-hasOneTwiceMatchingNumber counts str =
-    case str of
-        [] ->
-            Dict.values counts |> List.any (\x -> x == 2)
-
-        head :: rest ->
-            hasOneTwiceMatchingNumber (addToDict head counts) rest
+hasOneTwiceMatchingNumber : List Char -> Bool
+hasOneTwiceMatchingNumber str =
+    let
+        counts =
+            getDigitCounts Dict.empty str
+    in
+    Dict.values counts |> List.any (\x -> x == 2)
 
 
 couldBePassword : String -> Bool
@@ -66,7 +71,7 @@ couldBePassword str =
         x =
             str
                 |> String.toList
-                |> hasAdjacentDigits Set.empty
+                |> hasAdjacentDigits
 
         y =
             str
@@ -86,7 +91,7 @@ couldBePassword2 str =
         y =
             str
                 |> String.toList
-                |> hasOneTwiceMatchingNumber Dict.empty
+                |> hasOneTwiceMatchingNumber
     in
     x && y
 
