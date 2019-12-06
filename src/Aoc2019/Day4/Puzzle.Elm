@@ -35,11 +35,9 @@ getDigitCounts counts str =
 hasAdjacentDigits : List Char -> Bool
 hasAdjacentDigits str =
     -- Assumes digits are always increasing
-    let
-        counts =
-            getDigitCounts Dict.empty str
-    in
-    Dict.values counts |> List.any (\x -> x >= 2)
+    getDigitCounts Dict.empty str
+        |> Dict.values
+        |> List.any (\x -> x >= 2)
 
 
 digitsIncrease : Int -> List Int -> Bool
@@ -58,11 +56,9 @@ digitsIncrease previous str =
 
 hasOneTwiceMatchingNumber : List Char -> Bool
 hasOneTwiceMatchingNumber str =
-    let
-        counts =
-            getDigitCounts Dict.empty str
-    in
-    Dict.values counts |> List.any (\x -> x == 2)
+    getDigitCounts Dict.empty str
+        |> Dict.values
+        |> List.any (\x -> x == 2)
 
 
 couldBePassword : String -> Bool
