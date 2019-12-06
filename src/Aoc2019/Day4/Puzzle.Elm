@@ -2,7 +2,9 @@ module AoC2019.Day4.Puzzle exposing (part1, part2)
 
 import AoC2019.Day4.Input exposing (input)
 import Debug
+import Dict
 import Set
+import Utils.Dict exposing (addToDict)
 
 
 parsedInput =
@@ -48,6 +50,16 @@ digitsIncrease previous str =
                 digitsIncrease head rest
 
 
+hasOneTwiceMatchingNumber : Dict.Dict Char Int -> List Char -> Bool
+hasOneTwiceMatchingNumber counts str =
+    case str of
+        [] ->
+            Dict.values counts |> List.any (\x -> x == 2)
+
+        head :: rest ->
+            hasOneTwiceMatchingNumber (addToDict head counts) rest
+
+
 couldBePassword : String -> Bool
 couldBePassword str =
     let
@@ -65,8 +77,22 @@ couldBePassword str =
     x && y
 
 
+couldBePassword2 : String -> Bool
+couldBePassword2 str =
+    let
+        x =
+            couldBePassword str
 
--- part 1 answer : 945
+        y =
+            str
+                |> String.toList
+                |> hasOneTwiceMatchingNumber Dict.empty
+    in
+    x && y
+
+
+
+-- part 1 answer: 945
 
 
 part1 : String
@@ -77,6 +103,13 @@ part1 =
         |> String.fromInt
 
 
+
+-- Part 2 answer: 617
+
+
 part2 : String
 part2 =
-    "abc"
+    parsedInput
+        |> List.filter couldBePassword2
+        |> List.length
+        |> String.fromInt
