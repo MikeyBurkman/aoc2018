@@ -1,7 +1,7 @@
-module Day5.Puzzle exposing (part1, part2)
+module AoC2018.Day5.Puzzle exposing (part1, part2)
 
+import AoC2018.Day5.Input as Input
 import Array
-import Day5.Input as Input
 import Debug
 import Dict
 import Maybe

@@ -4,8 +4,8 @@ import Dict
 
 
 {-| For an accumulating dictionary.
-addToDict ["a": 1, "b": 2] "a" == ["a": 2, "b": 2]
-addToDict ["a": 1] "b" == ["a": 1, "b": 1]
+addToDict "a" ["a": 1, "b": 2] == ["a": 2, "b": 2]
+addToDict "b" ["a": 1] == ["a": 1, "b": 1]
 -}
 addToDict : comparable -> Dict.Dict comparable Int -> Dict.Dict comparable Int
 addToDict n dict =

@@ -1,6 +1,6 @@
-module Day3.Parser exposing (ParsedSquare, parsedInput)
+module AoC2018.Day3.Parser exposing (ParsedSquare, parsedInput)
 
-import Day3.Input exposing (input)
+import AoC2018.Day3.Input exposing (input)
 import Parser exposing ((|.), (|=), Parser)
 
 
